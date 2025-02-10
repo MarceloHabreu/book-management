@@ -1,0 +1,6 @@
+CREATE TABLE book (
+    id BIGSERIAL PRIMARY KEY NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    author VARCHAR(100) NOT NULL,
+    is_borrowed BOOLEAN DEFAULT FALSE
+);
