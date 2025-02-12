@@ -10,8 +10,13 @@ import org.springframework.web.context.request.WebRequest;
 public class GlobalExceptionHandler extends RuntimeException {
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
-    public ResponseEntity<?> handleEmailAlreadyExistyException(EmailAlreadyExistsException ex, WebRequest request){
+    public ResponseEntity<?> handleEmailAlreadyExistyException(EmailAlreadyExistsException ex, WebRequest request) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
 
