@@ -1,10 +1,11 @@
 package io.github.marcelohabreu.bookManagement.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.github.marcelohabreu.bookManagement.models.User;
 
 import java.time.LocalDateTime;
 
-public record UserDTO(Long id, String name, String email, LocalDateTime created_at) {
+public record UserDTO(Long id, String name, String email, @JsonFormat(pattern="dd/MM/yyyy HH:mm:ss") LocalDateTime created_at) {
 
     public User toModel(){
         return new User(id, name, email, created_at);

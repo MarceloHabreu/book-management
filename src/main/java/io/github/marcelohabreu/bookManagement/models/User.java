@@ -1,5 +1,6 @@
 package io.github.marcelohabreu.bookManagement.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class User {
     private String email;
 
     @CreationTimestamp
+    @JsonFormat(pattern="dd/MM/yyyy HH:mm:ss")
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime created_at;
 }
