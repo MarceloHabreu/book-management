@@ -61,8 +61,8 @@ public class BookService {
         bookUpdated.setId(id);
         bookUpdated.setTitle(b.title());
         bookUpdated.setAuthor(b.author());
-        bookUpdated.setBorrowed(b.isBorrowed());
         bookUpdated.setCreated_at(bookExists.get().getCreated_at());
+        bookUpdated.setBorrowed(bookExists.get().isBorrowed());
 
         checkBook(bookUpdated);
 

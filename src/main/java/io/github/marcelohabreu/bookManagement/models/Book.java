@@ -35,4 +35,6 @@ public class Book {
     @JsonFormat(pattern="dd/MM/yyyy HH:mm:ss")
     private LocalDateTime updated_at;
 
+    public Book(Long id, String title, String author, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    }
 }
