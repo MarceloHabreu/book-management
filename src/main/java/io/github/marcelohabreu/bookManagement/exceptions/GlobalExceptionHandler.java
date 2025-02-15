@@ -27,8 +27,29 @@ public class GlobalExceptionHandler extends RuntimeException {
     }
 
     @ExceptionHandler(BookAlreadyExistException.class)
-    public ResponseEntity<?> handleEmailAlreadyExistyException(BookAlreadyExistException ex, WebRequest request) {
+    public ResponseEntity<?> handleBookAlreadyExistyException(BookAlreadyExistException ex, WebRequest request) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(BookAlreadyBorrowedException.class)
+    public ResponseEntity<?> handleBookAlreadyBorrowedException(BookAlreadyBorrowedException ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    // Loan
+    @ExceptionHandler(LoanNotFoundException.class)
+    public ResponseEntity<?> handleLoanNotFoundException(LoanNotFoundException ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BookAlreadyReturnedException.class)
+    public ResponseEntity<?> handleBookAlreadyReturnedException(BookAlreadyReturnedException ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(UserHasActiveLoanException.class)
+    public ResponseEntity<?> handleUserHasActiveLoanException(UserHasActiveLoanException ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
 
