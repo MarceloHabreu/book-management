@@ -1,5 +1,13 @@
 package io.github.marcelohabreu.bookManagement.exceptions;
 
+import io.github.marcelohabreu.bookManagement.exceptions.book.BookAlreadyExistException;
+import io.github.marcelohabreu.bookManagement.exceptions.loan.BookAlreadyReturnedException;
+import io.github.marcelohabreu.bookManagement.exceptions.book.BookNotFoundException;
+import io.github.marcelohabreu.bookManagement.exceptions.loan.BookAlreadyBorrowedException;
+import io.github.marcelohabreu.bookManagement.exceptions.loan.LoanNotFoundException;
+import io.github.marcelohabreu.bookManagement.exceptions.loan.UserHasActiveLoanException;
+import io.github.marcelohabreu.bookManagement.exceptions.user.EmailAlreadyExistsException;
+import io.github.marcelohabreu.bookManagement.exceptions.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

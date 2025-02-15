@@ -16,22 +16,22 @@ public class BookController {
     private BookService service;
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody BookDTO b){
+    public ResponseEntity<String> create(@RequestBody BookDTO b) {
         return service.saveBook(b);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookDTO> getBook(@PathVariable Long id){
+    public ResponseEntity<BookDTO> getBook(@PathVariable Long id) {
         return service.getBookById(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<BookDTO>> getBook(){
+    public ResponseEntity<List<BookDTO>> getBook() {
         return service.listAllBooks();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@RequestBody BookDTO b, @PathVariable Long id){
+    public ResponseEntity<String> update(@RequestBody BookDTO b, @PathVariable Long id) {
         return service.updateBook(b, id);
     }
 

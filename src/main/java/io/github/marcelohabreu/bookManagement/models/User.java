@@ -24,7 +24,7 @@ public class User {
     private String email;
 
     @CreationTimestamp
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm:ss")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime created_at;
 }

@@ -14,6 +14,6 @@ public record BookDTO(Long id, String title, String author, boolean isBorrowed,
     }
 
     public static BookDTO fromModel(Book b) {
-        return new BookDTO(b.getId(), b.getTitle(), b.getAuthor(),b.isBorrowed(), b.getCreated_at(), b.getUpdated_at());
+        return new BookDTO(b.getId(), b.getTitle(), b.getAuthor(), b.isBorrowed(), b.getCreated_at(), b.getUpdated_at());
     }
 }

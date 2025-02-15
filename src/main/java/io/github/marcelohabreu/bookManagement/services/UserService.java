@@ -1,8 +1,8 @@
 package io.github.marcelohabreu.bookManagement.services;
 
 import io.github.marcelohabreu.bookManagement.dtos.UserDTO;
-import io.github.marcelohabreu.bookManagement.exceptions.EmailAlreadyExistsException;
-import io.github.marcelohabreu.bookManagement.exceptions.UserNotFoundException;
+import io.github.marcelohabreu.bookManagement.exceptions.user.EmailAlreadyExistsException;
+import io.github.marcelohabreu.bookManagement.exceptions.user.UserNotFoundException;
 import io.github.marcelohabreu.bookManagement.models.User;
 import io.github.marcelohabreu.bookManagement.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class UserService {
     private void checkEmail(User u, Long id) {
         Optional<User> emailAlreadyExists = repository.findByEmail(u.getEmail());
         if (emailAlreadyExists.isPresent() && !emailAlreadyExists.get().getId().equals(id)) {
-            throw new EmailAlreadyExistsException("The e-mail you are trying to register already exists, try again!");
+            throw new EmailAlreadyExistsException();
         }
     }
 
@@ -40,7 +40,7 @@ public class UserService {
         return repository.findById(id)
                 .map(UserDTO::fromModel)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new UserNotFoundException("User not found, try again."));
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public ResponseEntity<List<UserDTO>> listAllUsers() {
@@ -53,7 +53,7 @@ public class UserService {
         Optional<User> userExists = repository.findById(id);
 
         if (userExists.isEmpty()) {
-            throw new UserNotFoundException("User Not found, try again!");
+            throw new UserNotFoundException();
         }
 
         User userUpdated = u.toModel();
@@ -73,6 +73,6 @@ public class UserService {
                 .map(user -> {
                     repository.delete(user);
                     return ResponseEntity.status(HttpStatus.OK).body("User successfully deleted.");
-                }).orElseThrow(() -> new UserNotFoundException("User not found, try again!"));
+                }).orElseThrow(UserNotFoundException::new);
     }
 }

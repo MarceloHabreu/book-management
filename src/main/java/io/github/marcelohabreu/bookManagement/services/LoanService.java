@@ -1,7 +1,12 @@
 package io.github.marcelohabreu.bookManagement.services;
 
 import io.github.marcelohabreu.bookManagement.dtos.LoanDTO;
-import io.github.marcelohabreu.bookManagement.exceptions.*;
+import io.github.marcelohabreu.bookManagement.exceptions.loan.BookAlreadyReturnedException;
+import io.github.marcelohabreu.bookManagement.exceptions.book.BookNotFoundException;
+import io.github.marcelohabreu.bookManagement.exceptions.loan.BookAlreadyBorrowedException;
+import io.github.marcelohabreu.bookManagement.exceptions.loan.LoanNotFoundException;
+import io.github.marcelohabreu.bookManagement.exceptions.loan.UserHasActiveLoanException;
+import io.github.marcelohabreu.bookManagement.exceptions.user.UserNotFoundException;
 import io.github.marcelohabreu.bookManagement.models.Book;
 import io.github.marcelohabreu.bookManagement.models.Loan;
 import io.github.marcelohabreu.bookManagement.models.User;
@@ -42,17 +47,17 @@ public class LoanService {
     @Transactional
     public ResponseEntity<String> createLoan(Long userId, Long bookId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found, try again!"));
+                .orElseThrow(UserNotFoundException::new);
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new BookNotFoundException("Book not found, try again!"));
+                .orElseThrow(BookNotFoundException::new);
 
         if (book.isBorrowed()) {
-            throw new BookAlreadyBorrowedException("This book is already borrowed.");
+            throw new BookAlreadyBorrowedException();
         }
 
         int activeLoans = loanRepository.countActiveLoansByUser(userId);
         if (activeLoans >= 2) {
-            throw new UserHasActiveLoanException("User has already borrowed two books");
+            throw new UserHasActiveLoanException();
         }
 
         Loan newLoan = new Loan();
@@ -69,7 +74,7 @@ public class LoanService {
     }
 
     @Transactional
-    public ResponseEntity<LoanDTO> getLoanById(Long loanId){
+    public ResponseEntity<LoanDTO> getLoanById(Long loanId) {
         Loan loanFound = checkLoan(loanId);
         LoanDTO loan = LoanDTO.fromModel(loanFound);
         return ResponseEntity.ok(loan);
@@ -80,7 +85,7 @@ public class LoanService {
         Loan loan = checkLoan(loanId);
 
         if (loan.getReturnDate() != null) {
-            throw new BookAlreadyReturnedException("This book has already been returned!");
+            throw new BookAlreadyReturnedException();
         }
 
         loan.setReturnDate(LocalDateTime.now());
@@ -94,6 +99,6 @@ public class LoanService {
 
     private Loan checkLoan(Long loanId) {
         return loanRepository.findById(loanId)
-                .orElseThrow(() -> new LoanNotFoundException("Loan not found, try again!"));
+                .orElseThrow(LoanNotFoundException::new);
     }
 }

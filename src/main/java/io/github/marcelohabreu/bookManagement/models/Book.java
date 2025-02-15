@@ -26,13 +26,13 @@ public class Book {
     private boolean isBorrowed = false;
 
     @CreationTimestamp
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm:ss")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime created_at;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm:ss")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime updated_at;
 
     public Book(Long id, String title, String author, LocalDateTime createdAt, LocalDateTime updatedAt) {
