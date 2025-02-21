@@ -9,20 +9,19 @@ import { IoMdClose } from "react-icons/io";
 import { ImBooks } from "react-icons/im";
 import { FiMenu } from "react-icons/fi";
 
-export default function AdminLayout({
+export default function UserLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
-    // Itens do menu para o layout de admin
-    const adminMenuItems = (
+    // Itens do menu para o layout de user
+    const userMenuItems = (
         <>
-            <MenuItem href="/admin" label="Dashboard" icon={<MdSpaceDashboard size={16} />} />
-            <MenuItem href="/admin/books" label="Books" icon={<ImBooks size={16} />} />
-            <MenuItem href="/admin/users" label="Users" icon={<PiUsersThreeFill size={16} />} />
-            <MenuItem href="/admin/reports" label="Reports" icon={<TbReportAnalytics size={16} />} />
+            <MenuItem href="/user" label="Dashboard" icon={<MdSpaceDashboard size={16} />} />
+            <MenuItem href="/user/books" label="Books" icon={<ImBooks size={16} />} />
+            <MenuItem href="/user/reports" label="Reports" icon={<TbReportAnalytics size={16} />} />
         </>
     );
     return (
@@ -32,7 +31,7 @@ export default function AdminLayout({
             </head>
             <body>
                 <div className="h-screen flex bg-zinc-100">
-                    <Sidebar isOpen={isSidebarOpen} menuItems={adminMenuItems} />
+                    <Sidebar isOpen={isSidebarOpen} menuItems={userMenuItems} />
                     <Navbar />
                     <div className="flex-1 flex flex-col min-h-screen overflow-y-auto">
                         <main className="flex-1 p-6 flex justify-center">
