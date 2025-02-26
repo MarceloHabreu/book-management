@@ -6,3 +6,10 @@
 body {
     font-family: "Montserrat", sans-serif;
 }
+
+/* globals.css */
+html,
+body {
+    height: 100%;
+    overflow: hidden; /* Impede rolagem global */
+}

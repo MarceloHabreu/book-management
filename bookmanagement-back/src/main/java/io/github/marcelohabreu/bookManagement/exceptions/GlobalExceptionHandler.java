@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @ControllerAdvice
 public class GlobalExceptionHandler extends RuntimeException {
 
@@ -35,8 +38,10 @@ public class GlobalExceptionHandler extends RuntimeException {
     }
 
     @ExceptionHandler(BookAlreadyExistException.class)
-    public ResponseEntity<?> handleBookAlreadyExistyException(BookAlreadyExistException ex, WebRequest request) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    public ResponseEntity<Map<String, String>> handleBookAlreadyExistyException(BookAlreadyExistException ex, WebRequest request) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     @ExceptionHandler(BookAlreadyBorrowedException.class)

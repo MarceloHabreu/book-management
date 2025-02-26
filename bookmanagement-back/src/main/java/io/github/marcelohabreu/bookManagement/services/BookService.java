@@ -11,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BookService {
@@ -29,12 +27,15 @@ public class BookService {
     }
 
     @Transactional
-    public ResponseEntity<String> saveBook(BookDTO b) {
-        Book newBook = b.toModel();
-        checkBook(newBook);
+    public ResponseEntity<Map<String, String>> saveBook(BookDTO b) {
+            Book newBook = b.toModel();
+            checkBook(newBook);
+            repository.save(newBook);
 
-        repository.save(newBook);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Book successfully registered.");
+            // Return message success
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Book successfully registered.");
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     public ResponseEntity<BookDTO> getBookById(Long id) {

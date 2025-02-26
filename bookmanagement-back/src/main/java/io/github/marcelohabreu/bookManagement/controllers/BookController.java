@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bookmanagement/books")
@@ -17,7 +18,7 @@ public class BookController {
     private BookService service;
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody BookDTO b) {
+    public ResponseEntity<Map<String, String>> create(@RequestBody BookDTO b) {
         return service.saveBook(b);
     }
 

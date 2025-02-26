@@ -8,6 +8,8 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { IoMdClose } from "react-icons/io";
 import { ImBooks } from "react-icons/im";
 import { FiMenu } from "react-icons/fi";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AdminLayout({
     children,
@@ -36,7 +38,7 @@ export default function AdminLayout({
     // Itens do menu para o layout de admin
     const adminMenuItems = (
         <>
-            <MenuItem key={"admin"} href="/admin" label="Dashboard" icon={<MdSpaceDashboard size={16} />} />
+            <MenuItem key={"admin"} href="/admin/dashboard" label="Dashboard" icon={<MdSpaceDashboard size={16} />} />
             <MenuItem key={"books"} href="/admin/books" label="Books" icon={<ImBooks size={16} />} />
             <MenuItem key={"users"} href="/admin/users" label="Users" icon={<PiUsersThreeFill size={16} />} />
             <MenuItem key={"reports"} href="/admin/reports" label="Reports" icon={<TbReportAnalytics size={16} />} />
@@ -47,16 +49,18 @@ export default function AdminLayout({
             <div ref={sidebarRef}>
                 <Sidebar isOpen={isSidebarOpen} menuItems={adminMenuItems} />
             </div>
-            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto">
+            <div className="flex-1 flex flex-col  overflow-y-auto">
                 <Navbar />
                 <main className="flex-1 flex justify-center">
-                    <div className="min-h-screen w-full bg-zinc-100 shadow-xl p-4 ">
-                        <div className="mt-2">{children}</div>
+                    <div className=" w-full bg-zinc-100 shadow-xl p-4 ">
+                        <div className="mt-2">
+                            {children} <ToastContainer />
+                        </div>
                     </div>
                 </main>
                 {/* Botão de menu flutuante */}
                 <button
-                    className="fixed bottom-4 right-4 md:hidden z-50 p-3 bg-zinc-950 text-white rounded-full shadow-lg"
+                    className="fixed bottom-4 right-4 md:hidden z-50 p-3 bg-zinc-950 text-white rounded-full shadow-lg flex items-center justify-center"
                     onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 >
                     {isSidebarOpen ? <IoMdClose size={24} /> : <FiMenu size={24} />}

@@ -52,16 +52,16 @@ interface MenuItemsProps {
 
 export const MenuItem: React.FC<MenuItemsProps> = ({ href, label, icon }) => {
     const thisPage = usePathname();
-    const isActive = href === thisPage;
+    const isActive = thisPage.startsWith(href);
     return (
         <a
             href={href}
-            className={`flex items-center gap-2 justify-center p-2 text-base font-normal transition-colors duration-200 ${
+            className={`flex items-center justify-between p-2 text-base font-normal transition-colors duration-200 ${
                 isActive ? "bg-white text-black" : "hover:bg-white hover:text-black"
             }`}
         >
-            {icon}
-            {label}
+            <span className=" w-2 pl-10">{icon}</span>
+            <span className="flex-grow text-center">{label}</span>
         </a>
     );
 };

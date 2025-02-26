@@ -12,8 +12,17 @@ import { httpClient } from "@/http";
 import { HiPencilSquare } from "react-icons/hi2";
 import { BiSolidTrash } from "react-icons/bi";
 import { AiOutlineEye } from "react-icons/ai";
+import { useRouter } from "next/navigation";
 
 export default function Books() {
+    const router = useRouter();
+    const handleNavigateCreate = () => {
+        router.push("/admin/books/create");
+    };
+    const handleNavigateEdit = () => {
+        router.push("/admin/books/edit");
+    };
+
     const {
         data: result,
         error,
@@ -29,13 +38,13 @@ export default function Books() {
     }
     const actionTemplate = (record: Book) => (
         <div className="flex space-x-2">
-            <button className="">
+            <button className="text-black" onClick={handleNavigateEdit}>
                 <HiPencilSquare />
             </button>
-            <button className="">
+            <button className="text-black">
                 <BiSolidTrash />
             </button>
-            <button className="">
+            <button className="text-black">
                 <AiOutlineEye />
             </button>
         </div>
@@ -45,7 +54,10 @@ export default function Books() {
             <div className="flex justify-between mb-6">
                 <h1 className="text-xl font-semibold">Book Management</h1>
                 <div className="flex gap-3 md:flex-row flex-col-reverse items-end">
-                    <button className="md:w-1/2 w-1/2 items-center bg-zinc-900 p-2 rounded-xl text-white text-sm flex gap-1  shadow-sm">
+                    <button
+                        className="md:w-1/2 w-1/2 items-center bg-zinc-900 p-2 rounded-xl text-white text-sm flex gap-1  shadow-sm"
+                        onClick={handleNavigateCreate}
+                    >
                         <IoIosAddCircle size={18} /> Add Book
                     </button>
                     <div className="relative w-full">
@@ -64,63 +76,35 @@ export default function Books() {
                 </div>
             </div>
 
-            <div className="shadow-sm">
-                <DataTable
-                    className="rounded-2xl overflow-hidden bg-zinc-700" // Adicionado rounded-2xl e overflow-hidden
-                    paginator={true}
-                    paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                    selectionMode="single"
-                    value={result?.data}
-                    rows={5}
-                    totalRecords={result?.data.length}
-                    rowClassName={() => "border-b border-gray-200"}
-                >
-                    <Column
-                        field="id"
-                        headerStyle={{
-                            backgroundColor: "#27272a",
-                            color: "white",
-                            borderTopLeftRadius: "1rem", // Arredondamento no canto superior esquerdo
-                            borderBottomLeftRadius: "1rem", // Arredondamento no canto inferior esquerdo
-                        }}
-                        header="Code"
-                    ></Column>
-                    <Column
-                        field="title"
-                        headerStyle={{
-                            backgroundColor: "#27272a",
-                            color: "white",
-                        }}
-                        header="Title"
-                    ></Column>
-                    <Column
-                        field="author"
-                        headerStyle={{
-                            backgroundColor: "#27272a",
-                            color: "white",
-                        }}
-                        header="Author"
-                    ></Column>
-                    <Column
-                        field="isBorrowed"
-                        headerStyle={{
-                            backgroundColor: "#27272a",
-                            color: "white",
-                        }}
-                        header="Availability"
-                    ></Column>
-                    <Column
-                        headerStyle={{
-                            backgroundColor: "#27272a",
-                            color: "white",
-                            borderTopRightRadius: "1rem", // Arredondamento no canto superior direito
-                            borderBottomRightRadius: "1rem", // Arredondamento no canto inferior direito
-                        }}
-                        body={actionTemplate}
-                        header="Actions"
-                    ></Column>
-                </DataTable>
-            </div>
+            <DataTable
+                className="rounded-2xl shadow-lg overflow-hidden no-pointer"
+                paginator={true}
+                stripedRows
+                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+                selectionMode="single"
+                value={result?.data}
+                rows={7}
+                totalRecords={result?.data.length}
+            >
+                <Column
+                    field="id"
+                    headerClassName="text-gray border-b-2 border-gray-700 pl-8"
+                    bodyClassName="pl-8"
+                    header="ID"
+                ></Column>
+                <Column field="title" headerClassName="text-gray  border-b-2 border-gray-700" header="Title"></Column>
+                <Column field="author" headerClassName="text-gray  border-b-2 border-gray-700" header="Author"></Column>
+                <Column
+                    field="isBorrowed"
+                    headerClassName="text-gray  border-b-2 border-gray-700"
+                    header="Availability"
+                ></Column>
+                <Column
+                    headerClassName="text-gray  border-b-2 border-gray-700 pr-8" // Centralizado + padding à direita
+                    body={actionTemplate}
+                    header="Actions"
+                ></Column>
+            </DataTable>
         </>
     );
 }
