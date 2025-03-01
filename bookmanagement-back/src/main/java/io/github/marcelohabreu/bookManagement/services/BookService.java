@@ -51,7 +51,7 @@ public class BookService {
     }
 
     @Transactional
-    public ResponseEntity<String> updateBook(BookDTO b, Long id) {
+    public ResponseEntity<Map<String, String>> updateBook(BookDTO b, Long id) {
         Optional<Book> bookExists = repository.findById(id);
 
         if (bookExists.isEmpty()) {
@@ -68,14 +68,19 @@ public class BookService {
         checkBook(bookUpdated);
 
         repository.save(bookUpdated);
-        return ResponseEntity.status(HttpStatus.OK).body("Book successfully updated.");
+        // Return message success
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Book successfully updated.");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    public ResponseEntity<String> deleteBook(Long id) {
+    public ResponseEntity<Map<String, String>> deleteBook(Long id) {
         return repository.findById(id)
                 .map(book -> {
                     repository.delete(book);
-                    return ResponseEntity.status(HttpStatus.OK).body("Book successfully deleted.");
+                    Map<String, String> response = new HashMap<>();
+                    response.put("message", "Book successfully deleted.");
+                    return ResponseEntity.status(HttpStatus.OK).body(response);
                 }).orElseThrow(BookNotFoundException::new);
     }
 }

@@ -33,8 +33,10 @@ public class GlobalExceptionHandler extends RuntimeException {
 
     // Book
     @ExceptionHandler(BookNotFoundException.class)
-    public ResponseEntity<?> handleBookNotFoundException(BookNotFoundException ex, WebRequest request) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<Map<String, String>> handleBookNotFoundException(BookNotFoundException ex, WebRequest request) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler(BookAlreadyExistException.class)

@@ -18,7 +18,55 @@ export const useBookService = () => {
         }
     };
 
+    interface BookResponse {
+        book?: Book;
+        error?: string;
+    }
+
+    const getBook = async (id: string): Promise<BookResponse> => {
+        try {
+            const url: string = `${resourceURL}/${id}`;
+            const response: AxiosResponse<Book> = await httpClient.get(url);
+            return { book: response.data };
+        } catch (error: any) {
+            if (error.response) {
+                return { error: error.response.data.error || "An unexpected error occurred." };
+            } else {
+                return { error: "Network error or server unreachable." };
+            }
+        }
+    };
+
+    const update = async (id: string, book: Book): Promise<{ message?: string; error?: string }> => {
+        try {
+            const response: AxiosResponse<{ message: string }> = await httpClient.put(`${resourceURL}/${id}`, book);
+            return { message: response.data.message };
+        } catch (error: any) {
+            if (error.response) {
+                return { error: error.response.data.error || "An unexpected error occurred." };
+            } else {
+                return { error: "Network error or server unreachable." };
+            }
+        }
+    };
+
+    const remove = async (id: string): Promise<{ message?: string; error?: string }> => {
+        try {
+            const response: AxiosResponse<{ message: string }> = await httpClient.delete(`${resourceURL}/${id}`);
+            return { message: response.data.message };
+        } catch (error: any) {
+            if (error.response) {
+                return { error: error.response.data.error || "An unexpected error occurred." };
+            } else {
+                return { error: "Network error or server unreachable." };
+            }
+        }
+    };
+
     return {
         save,
+        getBook,
+        update,
+        remove,
     };
 };

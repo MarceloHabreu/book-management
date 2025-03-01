@@ -33,12 +33,12 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@RequestBody BookDTO b, @PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> update(@RequestBody BookDTO b, @PathVariable Long id) {
         return service.updateBook(b, id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
         return service.deleteBook(id);
     }
 }
