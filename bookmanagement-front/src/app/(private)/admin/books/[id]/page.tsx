@@ -23,10 +23,6 @@ const ViewBook = ({ params: paramsPromise }: ViewBookParams) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    const handleNavigate = () => {
-        router.push("/admin/books");
-    };
-
     const params = React.use(paramsPromise);
 
     const { id } = params;
@@ -41,15 +37,7 @@ const ViewBook = ({ params: paramsPromise }: ViewBookParams) => {
         initialValues: { ...formSchema } as Book,
         enableReinitialize: true,
         validationSchema: validationScheme,
-        onSubmit: async (book) => {
-            const result = await update(book.id || "", book);
-            if (result.message) {
-                toast.success(result.message);
-                handleNavigate();
-            } else if (result.error) {
-                toast.error(result.error);
-            }
-        },
+        onSubmit: () => {},
     });
 
     useEffect(() => {
@@ -88,7 +76,7 @@ const ViewBook = ({ params: paramsPromise }: ViewBookParams) => {
                         </span>
                         <h1 className="text-lg sm:text-xl text-[#151619] font-semibold">View Book</h1>
                     </div>
-                    <button onClick={handleNavigate}>
+                    <button onClick={() => router.back()}>
                         <MdOutlineClose
                             size={24}
                             className="p-1 text-zinc-400 border border-zinc-600 border-solid rounded-md"
@@ -151,7 +139,7 @@ const ViewBook = ({ params: paramsPromise }: ViewBookParams) => {
                             type="button"
                             className="w-full max-w-xs bg-black text-white py-3 px-6 rounded-md font-semibold text-base hover:bg-zinc-800 transition-colors"
                             aria-label="Close form"
-                            onClick={() => router.push("/admin/books")}
+                            onClick={() => router.back()}
                         >
                             CLOSE
                         </button>

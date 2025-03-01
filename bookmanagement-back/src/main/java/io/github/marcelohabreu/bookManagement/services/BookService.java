@@ -131,11 +131,11 @@ public class BookService {
                 }).orElseThrow(BookNotFoundException::new);
     }
 
-    // @Scheduled(fixedRate = 2 * 60 * 1000) // test auto delete with schedule
-    @Scheduled(fixedRate = 24 * 60 * 60 * 1000) // auto delete fixed each 24 hours
+    // @Scheduled(fixedRate = 60 * 1000) // test auto delete with schedule
+     @Scheduled(fixedRate = 24 * 60 * 60 * 1000) // auto delete fixed each 24 hours
     public void autoDeleteInactiveBooks() {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
-        // LocalDateTime twoMinuteAgo = LocalDateTime.now().minusMinutes(2);
+        // LocalDateTime oneMinuteAgo = LocalDateTime.now().minusMinutes(1);
         List<Book> expiredBooks = repository.findByIsActiveFalseAndDeletedAtBefore(oneWeekAgo);
         repository.deleteAll(expiredBooks);
         // Log

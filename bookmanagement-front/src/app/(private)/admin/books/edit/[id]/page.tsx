@@ -193,7 +193,7 @@ const EditBook = ({ params: paramsPromise }: EditBookParams) => {
                             disabled={!formik.isValid || formik.isSubmitting}
                             className=" w-full bg-black text-white py-2 sm:py-3 rounded-md font-semibold text-sm sm:text-base hover:bg-zinc-800 transition-colors disabled:bg-gray-400"
                         >
-                            SAVE
+                            UPDATE
                         </button>
                     </div>
                 </form>

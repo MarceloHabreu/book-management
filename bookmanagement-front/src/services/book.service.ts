@@ -50,9 +50,31 @@ export const useBookService = () => {
         }
     };
 
-    const remove = async (id: string): Promise<{ message?: string; error?: string }> => {
+    const restoreBook = async (id: string): Promise<{ message?: string; error?: string }> => {
+        try {
+            const response = await httpClient.patch(`/books/trash/${id}/restore`);
+            return { message: response.data.message };
+        } catch (error: any) {
+            return { error: error.response?.data.error || "Failed to restore book" };
+        }
+    };
+
+    const softDelete = async (id: string): Promise<{ message?: string; error?: string }> => {
         try {
             const response: AxiosResponse<{ message: string }> = await httpClient.delete(`${resourceURL}/${id}`);
+            return { message: response.data.message };
+        } catch (error: any) {
+            if (error.response) {
+                return { error: error.response.data.error || "An unexpected error occurred." };
+            } else {
+                return { error: "Network error or server unreachable." };
+            }
+        }
+    };
+
+    const permanentDelete = async (id: string): Promise<{ message?: string; error?: string }> => {
+        try {
+            const response: AxiosResponse<{ message: string }> = await httpClient.delete(`${resourceURL}/trash/${id}`);
             return { message: response.data.message };
         } catch (error: any) {
             if (error.response) {
@@ -67,6 +89,8 @@ export const useBookService = () => {
         save,
         getBook,
         update,
-        remove,
+        restoreBook,
+        softDelete,
+        permanentDelete,
     };
 };

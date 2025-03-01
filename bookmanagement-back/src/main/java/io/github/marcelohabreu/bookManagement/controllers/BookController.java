@@ -52,7 +52,7 @@ public class BookController {
         return service.permanentDeleteBook(id);
     }
 
-    @PatchMapping("/trash/{id}")
+    @PatchMapping("/trash/{id}/restore")
     public ResponseEntity<Map<String, String>> restoreBook(@PathVariable Long id){
         return service.restoreBook(id);
     }
