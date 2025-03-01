@@ -25,6 +25,9 @@ public class Book {
     @Column(name = "is_borrowed")
     private boolean isBorrowed = false;
 
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive = true;
+
     @CreationTimestamp
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "created_at", updatable = false, nullable = false)
@@ -34,6 +37,9 @@ public class Book {
     @Column(name = "updated_at")
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime updated_at;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     public Book(Long id, String title, String author, LocalDateTime createdAt, LocalDateTime updatedAt) {
     }

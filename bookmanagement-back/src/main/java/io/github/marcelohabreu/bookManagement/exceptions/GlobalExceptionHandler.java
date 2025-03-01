@@ -1,6 +1,7 @@
 package io.github.marcelohabreu.bookManagement.exceptions;
 
 import io.github.marcelohabreu.bookManagement.exceptions.book.BookAlreadyExistException;
+import io.github.marcelohabreu.bookManagement.exceptions.book.BookIsLoanException;
 import io.github.marcelohabreu.bookManagement.exceptions.loan.BookAlreadyReturnedException;
 import io.github.marcelohabreu.bookManagement.exceptions.book.BookNotFoundException;
 import io.github.marcelohabreu.bookManagement.exceptions.loan.BookAlreadyBorrowedException;
@@ -44,6 +45,13 @@ public class GlobalExceptionHandler extends RuntimeException {
         Map<String, String> response = new HashMap<>();
         response.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(BookIsLoanException.class)
+    public ResponseEntity<Map<String, String>> handleBookIsLoanException(BookIsLoanException ex, WebRequest request) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(BookAlreadyBorrowedException.class)

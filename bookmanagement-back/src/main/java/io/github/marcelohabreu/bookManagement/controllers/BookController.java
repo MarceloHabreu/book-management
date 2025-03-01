@@ -28,8 +28,13 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BookDTO>> getBook() {
-        return service.listAllBooks();
+    public ResponseEntity<List<BookDTO>> getActiveBooks() {
+        return service.listActiveBooks();
+    }
+
+    @GetMapping("/trash")
+    public ResponseEntity<List<BookDTO>> getInactiveBooks() {
+        return service.listInactiveBooks();
     }
 
     @PutMapping("/{id}")
@@ -38,7 +43,17 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
-        return service.deleteBook(id);
+    public ResponseEntity<Map<String, String>> softDelete(@PathVariable Long id) {
+        return service.softDeleteBook(id);
+    }
+
+    @DeleteMapping("/trash/{id}")
+    public ResponseEntity<Map<String, String>> permanentDelete(@PathVariable Long id) {
+        return service.permanentDeleteBook(id);
+    }
+
+    @PatchMapping("/trash/{id}")
+    public ResponseEntity<Map<String, String>> restoreBook(@PathVariable Long id){
+        return service.restoreBook(id);
     }
 }
