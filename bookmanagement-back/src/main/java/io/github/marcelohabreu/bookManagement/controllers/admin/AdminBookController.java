@@ -1,4 +1,4 @@
-package io.github.marcelohabreu.bookManagement.controllers;
+package io.github.marcelohabreu.bookManagement.controllers.admin;
 
 import io.github.marcelohabreu.bookManagement.dtos.BookDTO;
 import io.github.marcelohabreu.bookManagement.services.BookService;
@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/bookmanagement/books")
+@RequestMapping("/api/bookmanagement/admin/books")
 @CrossOrigin("*")
-public class BookController {
+public class AdminBookController {
 
     @Autowired
     private BookService service;

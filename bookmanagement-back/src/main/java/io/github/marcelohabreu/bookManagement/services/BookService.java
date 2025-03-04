@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -141,4 +142,5 @@ public class BookService {
         // Log
         System.out.println("Deleted " + expiredBooks.size() + " expired books from trash.");
     }
+
 }

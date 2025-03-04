@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import IconDelete from "@/public/imgs/IconDelete.png";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-import { useBookService } from "@/services/book.service";
+import { useBookService } from "@/services/admin/book.service";
 import Image from "next/image";
 import { MdOutlineClose } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -38,7 +38,7 @@ export default function Books() {
         const result = await restoreBook(id);
         if (result.message) {
             toast.success(result.message);
-            mutate("/books/trash");
+            mutate("/admin/books/trash");
         } else if (result.error) {
             toast.error(result.error);
         }
@@ -123,12 +123,12 @@ export default function Books() {
             },
         }).then((result) => {
             if (result.isConfirmed) {
-                mutate("/books/trash");
+                mutate("/admin/books/trash");
             }
         });
     };
 
-    const { data: result, isLoading } = useSWR<AxiosResponse<Book[]>>(`/books/trash`, (url: string) =>
+    const { data: result, isLoading } = useSWR<AxiosResponse<Book[]>>(`/admin/books/trash`, (url: string) =>
         httpClient.get(url)
     );
 
@@ -139,7 +139,6 @@ export default function Books() {
             </div>
         );
     }
-    ("use client");
 
     const actionTemplate = (record: Book) => (
         <div className="flex space-x-2">
@@ -180,14 +179,14 @@ export default function Books() {
         <div className="p-6 bg-gray-50 min-h-screen">
             <div className="flex flex-col md:flex-row justify-between mb-8 items-center">
                 <h1 className="text-2xl font-bold text-gray-800 text-center md:text-left mb-4 md:mb-0">Book Trash</h1>
-                <div className="md:grid grid-cols-5 gap-4 flex flex-col-reverse items-end  w-full">
+                <div className="md:grid md:grid-cols-5 gap-4 flex flex-col-reverse items-end  w-full">
                     <button
-                        className="sm:col-span-2 md:col-span-1 w-full md:w-full bg-gray-700 hover:bg-gray-800 text-white py-2 px-4 rounded-xl flex items-center gap-2 shadow-md transition-colors"
+                        className="col-span-2 md:col-span-2 lg:col-span-1 w-full md:w-full bg-gray-700 hover:bg-gray-800 text-white py-2 px-4 rounded-xl flex items-center gap-2 shadow-md transition-colors"
                         onClick={handleNavigateBack}
                     >
                         <IoArrowBackCircleOutline size={20} /> Back to Books
                     </button>
-                    <div className="md:col-span-4  relative w-full">
+                    <div className="md:col-span-3 lg:col-span-4  relative w-full">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <CiSearch className="h-5 w-5 text-gray-400" />
                         </div>
@@ -214,7 +213,7 @@ export default function Books() {
                 value={result?.data}
                 rows={7}
                 totalRecords={result?.data.length}
-                emptyMessage="No books in the trash"
+                emptyMessage={<div className="text-center font-base text-zinc-400">No books in the trash</div>}
             >
                 <Column
                     field="id"

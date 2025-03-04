@@ -13,6 +13,7 @@ import io.github.marcelohabreu.bookManagement.models.User;
 import io.github.marcelohabreu.bookManagement.repositories.BookRepository;
 import io.github.marcelohabreu.bookManagement.repositories.LoanRepository;
 import io.github.marcelohabreu.bookManagement.repositories.UserRepository;
+import io.github.marcelohabreu.bookManagement.repositories.projection.LoanByMonth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -101,4 +102,5 @@ public class LoanService {
         return loanRepository.findById(loanId)
                 .orElseThrow(LoanNotFoundException::new);
     }
+
 }

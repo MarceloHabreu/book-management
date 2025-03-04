@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import { Book } from "@/models/Book";
 import * as Yup from "yup";
-import { useBookService } from "@/services/book.service";
+import { useBookService } from "@/services/admin/book.service";
 import { toast } from "react-toastify";
 
 const formSchema: Partial<Book> = {

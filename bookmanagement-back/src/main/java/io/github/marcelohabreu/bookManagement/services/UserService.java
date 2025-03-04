@@ -31,6 +31,7 @@ public class UserService {
     public ResponseEntity<String> saveUser(UserDTO u) {
         User newUser = u.toModel();
         checkEmail(newUser, newUser.getId());
+        newUser.setRole("ROLE_USER");
 
         repository.save(newUser);
         return ResponseEntity.status(HttpStatus.CREATED).body("User successfully registered.");
@@ -60,6 +61,7 @@ public class UserService {
         userUpdated.setId(id);
         userUpdated.setName(u.name());
         userUpdated.setEmail(u.email());
+        userUpdated.setRole("ROLE_USER");
 
         checkEmail(userUpdated, id);
 

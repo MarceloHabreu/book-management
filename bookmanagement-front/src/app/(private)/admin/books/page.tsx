@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import IconDelete from "@/public/imgs/IconDelete.png";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-import { useBookService } from "@/services/book.service";
+import { useBookService } from "@/services/admin/book.service";
 import Image from "next/image";
 import { MdOutlineClose } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -116,7 +116,7 @@ export default function Books() {
             },
         }).then((result) => {
             if (result.isConfirmed) {
-                mutate("/books");
+                mutate("/admin/books");
             }
         });
     };
@@ -125,7 +125,7 @@ export default function Books() {
         data: result,
         error,
         isLoading,
-    } = useSWR<AxiosResponse<Book[]>>(`/books`, (url: string) => httpClient.get(url));
+    } = useSWR<AxiosResponse<Book[]>>(`/admin/books`, (url: string) => httpClient.get(url));
 
     if (isLoading) {
         return (
@@ -176,27 +176,27 @@ export default function Books() {
                 <h1 className="text-2xl font-bold text-gray-800 text-center md:text-left mb-4 md:mb-0">
                     Book Management
                 </h1>
-                <div className="md:grid grid-cols-5 gap-4 flex flex-col-reverse items-end w-full md:w-auto">
+                <div className="md:grid lg:grid-cols-5 gap-4 flex flex-col-reverse items-end w-full md:w-auto">
                     <button
-                        className="col-span-1 w-full md:w-auto bg-zinc-800 hover:bg-zinc-700 text-white py-2 px-4 rounded-xl flex items-center gap-2 shadow-md transition-colors"
+                        className="lg:col-span-1 w-full md:w-auto bg-zinc-800 hover:bg-zinc-700 text-white py-2 px-4 rounded-xl flex items-center gap-2 shadow-md transition-colors"
                         onClick={handleNavigateCreate}
                     >
                         <IoIosAddCircle size={20} /> Add Book
                     </button>
                     <button
-                        className="col-span-1 w-full md:w-auto bg-gray-700 hover:bg-gray-800 text-white py-2 px-4 rounded-xl flex items-center gap-2 shadow-md transition-colors"
+                        className="lg:col-span-1 w-full md:w-auto bg-gray-700 hover:bg-gray-800 text-white py-2 px-4 rounded-xl flex items-center gap-2 shadow-md transition-colors"
                         onClick={() => router.push("/admin/books/trash")}
                     >
                         <FaTrash size={16} /> Trash
                     </button>
-                    <div className="col-span-3 relative w-full">
+                    <div className="md:col-span-2 lg:col-span-3 relative w-full">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <CiSearch className="h-5 w-5 text-gray-400" />
                         </div>
                         <input
                             className="w-full rounded-xl p-2 pl-10 text-sm bg-white border border-gray-300 shadow-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-zinc-500"
                             type="text"
-                            placeholder="Search by Name or Category"
+                            placeholder="Search by Name or Author"
                         />
                     </div>
                 </div>
@@ -211,6 +211,7 @@ export default function Books() {
                 value={result?.data}
                 rows={7}
                 totalRecords={result?.data.length}
+                emptyMessage={<div className="text-center font-base text-zinc-400"> No registered books</div>}
             >
                 <Column
                     field="id"

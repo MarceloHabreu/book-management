@@ -2,7 +2,7 @@ import { httpClient } from "@/http";
 import { Book } from "@/models/Book";
 import { AxiosResponse } from "axios";
 
-const resourceURL: string = "/books";
+const resourceURL: string = "/admin/books";
 
 export const useBookService = () => {
     const save = async (book: Book): Promise<{ message?: string; error?: string }> => {
@@ -52,7 +52,7 @@ export const useBookService = () => {
 
     const restoreBook = async (id: string): Promise<{ message?: string; error?: string }> => {
         try {
-            const response = await httpClient.patch(`/books/trash/${id}/restore`);
+            const response = await httpClient.patch(`${resourceURL}/trash/${id}/restore`);
             return { message: response.data.message };
         } catch (error: any) {
             return { error: error.response?.data.error || "Failed to restore book" };

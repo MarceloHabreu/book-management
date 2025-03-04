@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class User {
+    public static final String DEFAULT_ROLE = "ROLE_USER";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,4 +28,7 @@ public class User {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime created_at;
+
+    @Column(name = "role", nullable = false)
+    private String role = DEFAULT_ROLE;
 }

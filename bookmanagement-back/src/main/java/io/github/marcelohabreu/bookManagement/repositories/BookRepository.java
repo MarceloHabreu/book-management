@@ -22,4 +22,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Optional<Book> findByIdAndIsActiveFalse(Long id);
 
     Optional<Book> findByIdAndIsActiveTrue(Long id);
+
+    long countByIsBorrowedTrueAndIsActiveTrue();
+
 }

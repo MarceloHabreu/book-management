@@ -5,54 +5,49 @@ import IconBook from "@/public/imgs/iconBook.png";
 import { MdOutlineClose } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
-import { Book } from "@/models/Book";
-import * as Yup from "yup";
-import { useBookService } from "@/services/admin/book.service";
-import { toast } from "react-toastify";
 
-const formSchema: Partial<Book> = {
-    title: "",
-    author: "",
+import { toast } from "react-toastify";
+import { useUserService } from "@/services/admin/user.service";
+
+const formSchema: Partial<User> = {
+    name: "",
+    email: "",
 };
 
-interface ViewBookParams {
+interface ViewUserParams {
     params: Promise<{ id: string }>;
 }
 
-const ViewBook = ({ params: paramsPromise }: ViewBookParams) => {
+const ViewUser = ({ params: paramsPromise }: ViewUserParams) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const params = React.use(paramsPromise);
 
     const { id } = params;
-    const { getBook, update } = useBookService();
+    const { getUser } = useUserService();
 
-    const validationScheme = Yup.object().shape({
-        title: Yup.string().trim().required("Title is required").min(4, "Title must be at least 4 characters"),
-        author: Yup.string().trim().required("Author is required").min(4, "Author name must be at least 4 characters"),
-    });
-
-    const formik = useFormik<Book>({
-        initialValues: { ...formSchema } as Book,
+    const formik = useFormik<User>({
+        initialValues: { ...formSchema } as User,
         enableReinitialize: true,
-        validationSchema: validationScheme,
         onSubmit: () => {},
     });
 
     useEffect(() => {
         if (id) {
-            const fetchBook = async () => {
+            const fetchUser = async () => {
                 setIsLoading(true);
-                const result = await getBook(id);
-                if (result.book) {
-                    formik.setValues(result.book);
+                const result = await getUser(id);
+                console.log(id);
+
+                if (result.user) {
+                    formik.setValues(result.user);
                 } else if (result.error) {
                     toast.error(result.error);
                 }
                 setIsLoading(false);
             };
-            fetchBook();
+            fetchUser();
         }
     }, [id]);
 
@@ -74,7 +69,7 @@ const ViewBook = ({ params: paramsPromise }: ViewBookParams) => {
                         <span className="p-2 bg-zinc-200 rounded-lg">
                             <Image src={IconBook} alt="iconBook" width={20} height={20} />
                         </span>
-                        <h1 className="text-lg sm:text-xl text-[#151619] font-semibold">View Book</h1>
+                        <h1 className="text-lg sm:text-xl text-[#151619] font-semibold">View User</h1>
                     </div>
                     <button onClick={() => router.back()}>
                         <MdOutlineClose
@@ -88,33 +83,19 @@ const ViewBook = ({ params: paramsPromise }: ViewBookParams) => {
                 {/* Formulário */}
                 <form className="flex flex-col gap-6 border border-solid border-zinc-100 rounded-md p-6">
                     <div className="flex flex-col md:flex-row gap-6">
-                        {/* Seção de Informações do Livro */}
+                        {/* Seção de Informações do User */}
                         <div className="flex-1">
                             <div className="border-b border-zinc-600 mb-5">
-                                <span className="text-gray-700 font-semibold">Book ID:</span>{" "}
+                                <span className="text-gray-700 font-semibold">User ID:</span>{" "}
                                 <span className="text-gray-900">{formik.values.id}</span>
                             </div>
                             <div className="border-b border-zinc-600 mb-5">
-                                <span className="text-gray-700 font-semibold">Title:</span>{" "}
-                                <span className="text-gray-900">{formik.values.title}</span>
+                                <span className="text-gray-700 font-semibold">Name:</span>{" "}
+                                <span className="text-gray-900">{formik.values.name}</span>
                             </div>
                             <div className="border-b border-zinc-600 mb-5">
-                                <span className="text-gray-700 font-semibold">Author:</span>{" "}
-                                <span className="text-gray-900">{formik.values.author}</span>
-                            </div>
-                            <div className="border-b border-zinc-600 mb-5">
-                                <span className="text-gray-700 font-semibold">Availability:</span>{" "}
-                                <span className="text-gray-900">
-                                    {formik.values.isBorrowed ? "Borrowed" : "Available"}
-                                </span>
-                            </div>
-                            <div className="border-b border-zinc-600 mb-5">
-                                <span className="text-gray-700 font-semibold">Created At:</span>{" "}
-                                <span className="text-gray-900">{formik.values.created_at}</span>
-                            </div>
-                            <div className="border-b border-zinc-600 mb-5">
-                                <span className="text-gray-700 font-semibold">Updated At:</span>{" "}
-                                <span className="text-gray-900">{formik.values.updated_at}</span>
+                                <span className="text-gray-700 font-semibold">Email:</span>{" "}
+                                <span className="text-gray-900">{formik.values.email}</span>
                             </div>
                         </div>
 
@@ -124,10 +105,9 @@ const ViewBook = ({ params: paramsPromise }: ViewBookParams) => {
                         {/* Seção "Saved by" Centralizada */}
                         <div className="flex-1 flex items-center justify-center">
                             <div className="text-center">
-                                <h3 className="text-lg font-semibold mb-2 text-gray-800">Saved by:</h3>
+                                <h3 className="text-lg font-semibold mb-2 text-gray-800">Logged in:</h3>
                                 <div className="flex flex-col">
-                                    <p className="text-gray-900">Marcelo Henrique</p>
-                                    <p className="text-gray-900">(Admin)</p>
+                                    <p className="text-gray-900">{formik.values.created_at}</p>
                                 </div>
                             </div>
                         </div>
@@ -150,4 +130,4 @@ const ViewBook = ({ params: paramsPromise }: ViewBookParams) => {
     );
 };
 
-export default ViewBook;
+export default ViewUser;

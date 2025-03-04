@@ -1,4 +1,4 @@
-package io.github.marcelohabreu.bookManagement.controllers;
+package io.github.marcelohabreu.bookManagement.controllers.admin;
 
 import io.github.marcelohabreu.bookManagement.dtos.UserDTO;
 import io.github.marcelohabreu.bookManagement.services.UserService;
@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bookmanagement/users")
-public class UserController {
+@RequestMapping("/api/bookmanagement/admin/users")
+@CrossOrigin("*")
+public class AdminUserController {
 
     @Autowired
     private UserService service;
