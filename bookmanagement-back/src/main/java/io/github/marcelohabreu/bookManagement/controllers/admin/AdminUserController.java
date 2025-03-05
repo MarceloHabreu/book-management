@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bookmanagement/admin/users")
@@ -17,7 +18,7 @@ public class AdminUserController {
     private UserService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody UserDTO u) {
+    public ResponseEntity<Map<String, String>> create(@RequestBody UserDTO u) {
         return service.saveUser(u);
     }
 
@@ -27,17 +28,17 @@ public class AdminUserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> list() {
-        return service.listAllUsers();
+    public ResponseEntity<List<UserDTO>> list(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
+        return service.listAllUsers(name);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@RequestBody UserDTO u, @PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> update(@RequestBody UserDTO u, @PathVariable Long id) {
         return service.updateUser(u, id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
         return service.deleteUser(id);
     }
 }

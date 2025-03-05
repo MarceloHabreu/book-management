@@ -57,13 +57,13 @@ public class BookService {
                 .orElseThrow(BookNotFoundException::new);
     }
 
-    public ResponseEntity<List<BookDTO>> listActiveBooks() {
-        List<BookDTO> allActiveBooks = repository.findByIsActiveTrue().stream().sorted(Comparator.comparing(Book::getId)).map(BookDTO::fromModel).toList();
+    public ResponseEntity<List<BookDTO>> listActiveBooks(String title, String author) {
+        List<BookDTO> allActiveBooks = repository.findByIsActiveAndTitleOrAuthor(true,"%" + title + "%", "%" + author + "%").stream().sorted(Comparator.comparing(Book::getId)).map(BookDTO::fromModel).toList();
         return ResponseEntity.ok(allActiveBooks);
     }
 
-    public ResponseEntity<List<BookDTO>> listInactiveBooks() {
-        List<BookDTO> allInactiveBooks = repository.findByIsActiveFalse().stream().sorted(Comparator.comparing(Book::getId)).map(BookDTO::fromModel).toList();
+    public ResponseEntity<List<BookDTO>> listInactiveBooks(String title, String author) {
+        List<BookDTO> allInactiveBooks = repository.findByIsActiveAndTitleOrAuthor(false,"%" + title + "%", "%" + author + "%").stream().sorted(Comparator.comparing(Book::getId)).map(BookDTO::fromModel).toList();
         return ResponseEntity.ok(allInactiveBooks);
     }
 

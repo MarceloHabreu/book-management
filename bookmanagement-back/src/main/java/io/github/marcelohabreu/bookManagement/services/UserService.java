@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -28,13 +30,16 @@ public class UserService {
     }
 
     @Transactional
-    public ResponseEntity<String> saveUser(UserDTO u) {
+    public ResponseEntity<Map<String, String>> saveUser(UserDTO u) {
         User newUser = u.toModel();
         checkEmail(newUser, newUser.getId());
         newUser.setRole("ROLE_USER");
 
         repository.save(newUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User successfully registered.");
+        // Return message success
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "User successfully registered.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     public ResponseEntity<UserDTO> getUserById(Long id) {
@@ -44,13 +49,13 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
     }
 
-    public ResponseEntity<List<UserDTO>> listAllUsers() {
-        List<UserDTO> users = repository.findAll().stream().map(UserDTO::fromModel).toList();
+    public ResponseEntity<List<UserDTO>> listAllUsers(String name) {
+        List<UserDTO> users = repository.findByName("%" + name + "%").stream().map(UserDTO::fromModel).toList();
         return ResponseEntity.ok(users);
     }
 
     @Transactional
-    public ResponseEntity<String> updateUser(UserDTO u, Long id) {
+    public ResponseEntity<Map<String, String>> updateUser(UserDTO u, Long id) {
         Optional<User> userExists = repository.findById(id);
 
         if (userExists.isEmpty()) {
@@ -66,15 +71,20 @@ public class UserService {
         checkEmail(userUpdated, id);
 
         repository.save(userUpdated);
-        return ResponseEntity.status(HttpStatus.OK).body("User successfully updated.");
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "User successfully updated.");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
 
-    public ResponseEntity<String> deleteUser(Long id) {
+    public ResponseEntity<Map<String, String>> deleteUser(Long id) {
         return repository.findById(id)
                 .map(user -> {
                     repository.delete(user);
-                    return ResponseEntity.status(HttpStatus.OK).body("User successfully deleted.");
+                    Map<String, String> response = new HashMap<>();
+                    response.put("message", "User successfully deleted.");
+                    return ResponseEntity.status(HttpStatus.OK).body(response);
                 }).orElseThrow(UserNotFoundException::new);
     }
 }

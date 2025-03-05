@@ -1,7 +1,7 @@
 import { httpClient } from "@/http";
 import { AxiosResponse } from "axios";
 
-const resourceURL: string = "/users";
+const resourceURL: string = "/admin/users";
 
 export const useUserService = () => {
     interface UserResponse {

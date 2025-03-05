@@ -23,6 +23,7 @@
     "sweetalert2": "^11.17.2",
     "sweetalert2-react-content": "^5.1.0",
     "swr": "^2.3.2",
+    "use-debounce": "^10.0.4",
     "yup": "^1.6.1"
   },
   "devDependencies": {

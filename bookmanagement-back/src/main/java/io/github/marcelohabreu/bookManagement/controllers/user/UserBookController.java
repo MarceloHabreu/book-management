@@ -23,8 +23,8 @@ public class UserBookController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BookDTO>> list() {
-        return service.listActiveBooks();
+    public ResponseEntity<List<BookDTO>> list(@RequestParam(value = "title", required = false, defaultValue = "") String title,@RequestParam(value = "author", required = false, defaultValue = "") String author) {
+        return service.listActiveBooks(title, author);
     }
 
 }

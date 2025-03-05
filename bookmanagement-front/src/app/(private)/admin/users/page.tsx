@@ -1,15 +1,12 @@
 "use client";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { IoIosAddCircle } from "react-icons/io";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import { CiSearch } from "react-icons/ci";
 import useSWR, { mutate } from "swr";
 import { AxiosResponse } from "axios";
-import { Book } from "@/models/Book";
 import { httpClient } from "@/http";
-import { HiPencilSquare } from "react-icons/hi2";
 import { BiSolidTrash } from "react-icons/bi";
 import { AiOutlineEye } from "react-icons/ai";
 import { useRouter } from "next/navigation";
@@ -21,15 +18,47 @@ import { MdOutlineClose } from "react-icons/md";
 import { toast } from "react-toastify";
 import { FaBook, FaHashtag, FaPen, FaTrash } from "react-icons/fa6";
 import { useUserService } from "@/services/admin/user.service";
+import { useState } from "react";
+import { useDebounce } from "use-debounce";
 const MySwal = withReactContent(Swal);
 
 export default function Users() {
+    const [nameFilter, setNameFilter] = useState<string>("");
+    return (
+        <div className="p-6 bg-gray-50 min-h-screen">
+            <div className="flex flex-col md:flex-row justify-between mb-8 items-center">
+                <h1 className="text-2xl font-bold text-gray-800 text-center md:text-left mb-4 md:mb-0">
+                    User Management
+                </h1>
+                <div className=" w-full md:w-1/2">
+                    <div className="relative w-full">
+                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <CiSearch className="h-5 w-5 text-gray-400" />
+                        </div>
+                        <input
+                            value={nameFilter}
+                            onChange={(e) => setNameFilter(e.target.value)}
+                            className="w-full rounded-xl p-2 pl-10 text-sm bg-white border border-gray-300 shadow-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+                            type="text"
+                            placeholder="Search by Id or Name"
+                        />
+                    </div>
+                </div>
+            </div>
+            <UserTable nameFilter={nameFilter} />
+        </div>
+    );
+}
+
+const UserTable = ({ nameFilter }: { nameFilter: string }) => {
     const router = useRouter();
     const { permanentDelete } = useUserService();
 
     const handleNavigateView = (id: string) => {
         router.push(`/admin/users/${id}`);
     };
+
+    const [debouncedNameFilter] = useDebounce(nameFilter, 700);
 
     const handleDeleteClick = (user: User) => {
         MySwal.fire({
@@ -116,7 +145,7 @@ export default function Users() {
             },
         }).then((result) => {
             if (result.isConfirmed) {
-                mutate("/admin/users");
+                mutate(`/admin/users?name=${debouncedNameFilter}`);
             }
         });
     };
@@ -125,7 +154,7 @@ export default function Users() {
         data: result,
         error,
         isLoading,
-    } = useSWR<AxiosResponse<User[]>>(`/admin/users`, (url: string) => httpClient.get(url));
+    } = useSWR<AxiosResponse<User[]>>(`/admin/users?name=${debouncedNameFilter}`, (url: string) => httpClient.get(url));
 
     if (isLoading) {
         return (
@@ -163,61 +192,41 @@ export default function Users() {
     }
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
-            <div className="flex flex-col md:flex-row justify-between mb-8 items-center">
-                <h1 className="text-2xl font-bold text-gray-800 text-center md:text-left mb-4 md:mb-0">
-                    User Management
-                </h1>
-                <div className=" w-full md:w-1/2">
-                    <div className="relative w-full">
-                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <CiSearch className="h-5 w-5 text-gray-400" />
-                        </div>
-                        <input
-                            className="w-full rounded-xl p-2 pl-10 text-sm bg-white border border-gray-300 shadow-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-zinc-500"
-                            type="text"
-                            placeholder="Search by Id or Name"
-                        />
-                    </div>
-                </div>
-            </div>
+        <DataTable
+            className="rounded-2xl shadow-lg overflow-hidden bg-white border border-gray-200"
+            paginator={true}
+            stripedRows
+            paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+            selectionMode="single"
+            value={result?.data}
+            rows={7}
+            totalRecords={result?.data.length}
+            emptyMessage={<div className="text-center font-base text-zinc-400">No registered users</div>}
+        >
+            <Column
+                field="id"
+                headerClassName="text-gray-700 font-semibold border-b-2 border-gray-300 pl-8 bg-gray-100"
+                bodyClassName="pl-8 text-gray-800"
+                header="ID"
+            />
+            <Column
+                field="name"
+                headerClassName="text-gray-700 font-semibold border-b-2 border-gray-300 bg-gray-100"
+                bodyClassName="text-gray-800"
+                header="Name"
+            />
+            <Column
+                field="email"
+                headerClassName="text-gray-700 font-semibold border-b-2 border-gray-300 bg-gray-100"
+                bodyClassName="text-gray-800"
+                header="Email"
+            />
 
-            <DataTable
-                className="rounded-2xl shadow-lg overflow-hidden bg-white border border-gray-200"
-                paginator={true}
-                stripedRows
-                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                selectionMode="single"
-                value={result?.data}
-                rows={7}
-                totalRecords={result?.data.length}
-                emptyMessage={<div className="text-center font-base text-zinc-400">No registered users</div>}
-            >
-                <Column
-                    field="id"
-                    headerClassName="text-gray-700 font-semibold border-b-2 border-gray-300 pl-8 bg-gray-100"
-                    bodyClassName="pl-8 text-gray-800"
-                    header="ID"
-                />
-                <Column
-                    field="name"
-                    headerClassName="text-gray-700 font-semibold border-b-2 border-gray-300 bg-gray-100"
-                    bodyClassName="text-gray-800"
-                    header="Name"
-                />
-                <Column
-                    field="email"
-                    headerClassName="text-gray-700 font-semibold border-b-2 border-gray-300 bg-gray-100"
-                    bodyClassName="text-gray-800"
-                    header="Email"
-                />
-
-                <Column
-                    headerClassName="text-gray-700 font-semibold border-b-2 border-gray-300 pr-8 bg-gray-100"
-                    body={actionTemplate}
-                    header="Actions"
-                />
-            </DataTable>
-        </div>
+            <Column
+                headerClassName="text-gray-700 font-semibold border-b-2 border-gray-300 pr-8 bg-gray-100"
+                body={actionTemplate}
+                header="Actions"
+            />
+        </DataTable>
     );
-}
+};

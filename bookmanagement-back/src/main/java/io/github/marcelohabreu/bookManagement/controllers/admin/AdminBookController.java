@@ -28,13 +28,13 @@ public class AdminBookController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BookDTO>> getActiveBooks() {
-        return service.listActiveBooks();
+    public ResponseEntity<List<BookDTO>> getActiveBooks(@RequestParam(value = "title", required = false, defaultValue = "") String title,@RequestParam(value = "author", required = false, defaultValue = "") String author) {
+        return service.listActiveBooks(title,author);
     }
 
     @GetMapping("/trash")
-    public ResponseEntity<List<BookDTO>> getInactiveBooks() {
-        return service.listInactiveBooks();
+    public ResponseEntity<List<BookDTO>> getInactiveBooks(@RequestParam(value = "title", required = false, defaultValue = "") String title,@RequestParam(value = "author", required = false, defaultValue = "") String author) {
+        return service.listInactiveBooks(title,author);
     }
 
     @PutMapping("/{id}")
