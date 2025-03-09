@@ -1,0 +1,26 @@
+jwt:
+  public:
+    key: ${JWT_PUBLIC_KEY}
+  private:
+    key: ${JWT_PRIVATE_KEY}
+
+spring:
+  application:
+    name: bookManagement
+  datasource:
+    url: jdbc:postgresql://localhost:5432/book_management
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    repair-on-migrate: false
+  jpa:
+    show-sql: true
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
