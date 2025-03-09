@@ -1,6 +1,7 @@
 package io.github.marcelohabreu.bookManagement.controllers.user;
 
 import io.github.marcelohabreu.bookManagement.dtos.BookDTO;
+import io.github.marcelohabreu.bookManagement.dtos.BookResponse;
 import io.github.marcelohabreu.bookManagement.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,8 @@ public class UserBookController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BookDTO>> list(@RequestParam(value = "title", required = false, defaultValue = "") String title,@RequestParam(value = "author", required = false, defaultValue = "") String author) {
-        return service.listActiveBooks(title, author);
+    public ResponseEntity<List<BookResponse>> list(@RequestParam(value = "title", required = false, defaultValue = "") String title, @RequestParam(value = "author", required = false, defaultValue = "") String author) {
+        return service.listActiveBooksToUsers(title, author);
     }
 
 }

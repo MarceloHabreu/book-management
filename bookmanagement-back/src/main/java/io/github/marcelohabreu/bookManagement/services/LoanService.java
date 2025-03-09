@@ -1,6 +1,7 @@
 package io.github.marcelohabreu.bookManagement.services;
 
 import io.github.marcelohabreu.bookManagement.dtos.LoanDTO;
+import io.github.marcelohabreu.bookManagement.dtos.LoanResponseDTO;
 import io.github.marcelohabreu.bookManagement.exceptions.loan.BookAlreadyReturnedException;
 import io.github.marcelohabreu.bookManagement.exceptions.book.BookNotFoundException;
 import io.github.marcelohabreu.bookManagement.exceptions.loan.BookAlreadyBorrowedException;
@@ -13,7 +14,6 @@ import io.github.marcelohabreu.bookManagement.models.User;
 import io.github.marcelohabreu.bookManagement.repositories.BookRepository;
 import io.github.marcelohabreu.bookManagement.repositories.LoanRepository;
 import io.github.marcelohabreu.bookManagement.repositories.UserRepository;
-import io.github.marcelohabreu.bookManagement.repositories.projection.LoanByMonth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class LoanService {
@@ -45,8 +47,24 @@ public class LoanService {
         return ResponseEntity.ok(loans);
     }
 
+    public ResponseEntity<List<LoanResponseDTO>> listLoansByUser(Long id, String status) {
+        List<Loan> loans;
+        if ("active".equals(status)){
+            loans = loanRepository.findActiveLoansByUser(id);
+        } else if ("historic".equals(status)) {
+            loans = loanRepository.findHistoricLoansByUser(id);
+        } else {
+            loans = loanRepository.findAllLoansByUser(id);
+        }
+        List<LoanResponseDTO> loanDTOS = loans.stream()
+                .sorted(Comparator.comparing(Loan::getId))
+                .map(LoanResponseDTO::fromModel)
+                .toList();
+        return ResponseEntity.ok(loanDTOS);
+    }
+
     @Transactional
-    public ResponseEntity<String> createLoan(Long userId, Long bookId) {
+    public ResponseEntity<Map<String, String>> createLoan(Long userId, Long bookId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
         Book book = bookRepository.findById(bookId)
@@ -71,7 +89,10 @@ public class LoanService {
         loanRepository.save(newLoan);
         bookRepository.save(book);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Loan successfully created");
+        // Return message success
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully borrowed book");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @Transactional
@@ -82,7 +103,7 @@ public class LoanService {
     }
 
     @Transactional
-    public ResponseEntity<String> returnBook(Long loanId) {
+    public ResponseEntity<Map<String, String>> returnBook(Long loanId) {
         Loan loan = checkLoan(loanId);
 
         if (loan.getReturnDate() != null) {
@@ -95,7 +116,9 @@ public class LoanService {
         loanRepository.save(loan);
         bookRepository.save(loan.getBook());
 
-        return ResponseEntity.ok("Book successfully returned.");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Book successfully returned.");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     private Loan checkLoan(Long loanId) {

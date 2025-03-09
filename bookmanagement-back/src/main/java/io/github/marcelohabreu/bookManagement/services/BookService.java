@@ -1,8 +1,9 @@
 package io.github.marcelohabreu.bookManagement.services;
 
 import io.github.marcelohabreu.bookManagement.dtos.BookDTO;
+import io.github.marcelohabreu.bookManagement.dtos.BookResponse;
 import io.github.marcelohabreu.bookManagement.exceptions.book.BookAlreadyExistException;
-import io.github.marcelohabreu.bookManagement.exceptions.book.BookIsLoanException;
+import io.github.marcelohabreu.bookManagement.exceptions.book.BooksLoanException;
 import io.github.marcelohabreu.bookManagement.exceptions.book.BookNotFoundException;
 import io.github.marcelohabreu.bookManagement.models.Book;
 import io.github.marcelohabreu.bookManagement.repositories.BookRepository;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -33,7 +33,7 @@ public class BookService {
     private void checkBookToDelete(Long id) {
         Optional<Book> bookIsLoan = repository.findByIdAndIsBorrowedTrue(id);
         if (bookIsLoan.isPresent()) {
-            throw new BookIsLoanException();
+            throw new BooksLoanException();
         }
     }
 
@@ -59,6 +59,11 @@ public class BookService {
 
     public ResponseEntity<List<BookDTO>> listActiveBooks(String title, String author) {
         List<BookDTO> allActiveBooks = repository.findByIsActiveAndTitleOrAuthor(true,"%" + title + "%", "%" + author + "%").stream().sorted(Comparator.comparing(Book::getId)).map(BookDTO::fromModel).toList();
+        return ResponseEntity.ok(allActiveBooks);
+    }
+
+    public ResponseEntity<List<BookResponse>> listActiveBooksToUsers(String title, String author) {
+        List<BookResponse> allActiveBooks = repository.findByIsActiveAndTitleOrAuthor(true,"%" + title + "%", "%" + author + "%").stream().sorted(Comparator.comparing(Book::getId)).map(BookResponse::fromModel).toList();
         return ResponseEntity.ok(allActiveBooks);
     }
 

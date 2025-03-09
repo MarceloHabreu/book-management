@@ -34,9 +34,9 @@ public class AdminDasboardController {
         long totalUsers = service.getUserCount();
         long totalBooks = service.getBookCount();
         long totalBorrowed = service.getBorrowedBookCount();
-        List<LoanByMonth> loasnByMonth = service.getLoansByMonth(year);
+        List<LoanByMonth> loansByMonth = service.getLoansByMonth(year);
 
-        return ResponseEntity.ok(new Dashboard(totalAdmins,totalUsers,totalBooks,totalBorrowed,loasnByMonth));
+        return ResponseEntity.ok(new Dashboard(totalAdmins,totalUsers,totalBooks,totalBorrowed, loansByMonth));
     }
 
 }

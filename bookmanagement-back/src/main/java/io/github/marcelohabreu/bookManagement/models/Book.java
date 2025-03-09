@@ -43,4 +43,5 @@ public class Book {
 
     public Book(Long id, String title, String author, LocalDateTime createdAt, LocalDateTime updatedAt) {
     }
+
 }

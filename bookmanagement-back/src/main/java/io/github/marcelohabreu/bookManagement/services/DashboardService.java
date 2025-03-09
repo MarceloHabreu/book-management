@@ -23,11 +23,11 @@ public class DashboardService {
     }
 
     public long getAdminCount() {
-        return userRepository.countByRole("ROLE_ADMIN");
+        return userRepository.countByRoleName("ADMIN");
     }
 
     public long getUserCount() {
-        return userRepository.countByRole("ROLE_USER");
+        return userRepository.countByRoleName("BASIC");
     }
 
     public long getBookCount() {

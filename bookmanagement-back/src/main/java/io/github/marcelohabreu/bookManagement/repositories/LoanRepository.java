@@ -21,4 +21,16 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
                     "ORDER BY EXTRACT(MONTH FROM l.loan_date)"
     )
     List<LoanByMonth> getLoansByMonth(@Param("year") Integer year);
+
+    @Query("SELECT l FROM Loan l WHERE l.user.id = :userId")
+    List<Loan> findAllLoansByUser(@Param("userId") Long id);
+
+    @Query("SELECT l FROM Loan l WHERE l.user.id = :userId AND l.returnDate IS NULL")
+    List<Loan> findActiveLoansByUser(@Param("userId") Long userId);
+
+    @Query("SELECT l FROM Loan l WHERE l.user.id = :userId AND l.returnDate IS NOT NULL")
+    List<Loan> findHistoricLoansByUser(@Param("userId") Long userId);
+
+    boolean existsByUserId(Long id);
+
 }

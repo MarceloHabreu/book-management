@@ -12,10 +12,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
-    long countByRole(String roleUser);
-
     @Query("SELECT u FROM User u WHERE " +
             "upper(u.name) LIKE upper(:name) " +
             "ORDER BY u.id")
-    List<User> findByName(@Param("name") String name);
+    List<User> findAllByName(@Param("name") String name);
+
+    @Query("SELECT COUNT(DISTINCT u) FROM User u JOIN u.roles r WHERE r.name = :roleName")
+    long countByRoleName(@Param("roleName") String roleName);
 }
